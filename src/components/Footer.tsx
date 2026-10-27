@@ -1,0 +1,17 @@
+import { LINKS, REPO } from "../data/site";
+
+export default function Footer() {
+  return (
+    <footer>
+      <div className="wrap">
+        <span>plural · the shared room for your coding agent</span>
+        <nav>
+          <a href={LINKS.docs} target="_blank" rel="noopener">docs</a>
+          <a href={LINKS.threatModel} target="_blank" rel="noopener">threat model</a>
+          <a href={LINKS.releases} target="_blank" rel="noopener">releases</a>
+          <a href={REPO} target="_blank" rel="noopener">github</a>
+        </nav>
+      </div>
+    </footer>
+  );
+}

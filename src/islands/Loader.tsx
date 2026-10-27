@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import { FIGURES, H, SIDES, W, type Figure } from "../lib/logo";
 
