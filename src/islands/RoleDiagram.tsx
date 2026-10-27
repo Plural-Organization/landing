@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { ROLES, type Role } from "../data/roles";
 import { AGENT, dance, FIGURES, H, sideAt, SIDES, W } from "../lib/logo";
