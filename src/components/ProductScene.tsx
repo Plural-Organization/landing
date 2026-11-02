@@ -16,12 +16,26 @@ export function HeroProviders() {
   </div>;
 }
 
+const PREVIEW_WIDTH = 1080;
+
 export function BrowserMockup({ compact = false, member = team[0]!, paused = false }: { compact?: boolean; member?: typeof team[number]; paused?: boolean }) {
   const frame = useRef<HTMLIFrameElement>(null);
+  const box = useRef<HTMLDivElement>(null);
+  // The client is drawn at desktop width and scaled down to fit, so the box never scrolls sideways.
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const element = box.current;
+    if (!element) return;
+    const fit = () => setScale(Math.min(1, element.clientWidth / PREVIEW_WIDTH));
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
   const syncPause = () => { frame.current?.contentWindow?.postMessage({type:"plural-preview-pause",paused},location.origin); };
   useEffect(syncPause, [paused]);
-  return <div className={`real-web-embed${compact ? ' compact' : ''}`}>
-    <iframe ref={frame} tabIndex={-1} inert onLoad={syncPause} src={`/product-preview/index.html?name=${encodeURIComponent(member.name)}&agent=${encodeURIComponent(member.agent)}`} title="Plural web client — website creation demo, view only" loading={compact ? "lazy" : "eager"} />
+  return <div ref={box} className={`real-web-embed${compact ? ' compact' : ''}`}>
+    <iframe ref={frame} style={{ width: PREVIEW_WIDTH, height: `${100 / scale}%`, transform: `scale(${scale})` }} tabIndex={-1} inert onLoad={syncPause} src={`/product-preview/index.html?name=${encodeURIComponent(member.name)}&agent=${encodeURIComponent(member.agent)}`} title="Plural web client — website creation demo, view only" loading={compact ? "lazy" : "eager"} />
   </div>;
 }
 
