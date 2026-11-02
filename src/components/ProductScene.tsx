@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import TuiShot from "./TuiShot";
 
 const team = [
   { name: "Alia", agent: "Claude", icon: "claude", task: "Tracing the login redirect", file: "src/auth/session.ts", tone: "coral" },
@@ -17,44 +18,35 @@ export function HeroProviders() {
 }
 
 const PREVIEW_WIDTH = 1080;
+const NARROW = 640;
 
 export function BrowserMockup({ compact = false, member = team[0]!, paused = false }: { compact?: boolean; member?: typeof team[number]; paused?: boolean }) {
   const frame = useRef<HTMLIFrameElement>(null);
   const box = useRef<HTMLDivElement>(null);
-  // The client is drawn at desktop width and scaled down to fit, so the box never scrolls sideways.
-  const [scale, setScale] = useState(1);
+  // Wide boxes show the client at desktop width, scaled down to fit. Narrow ones give it the real width, so it
+  // switches to its own phone layout and the text stays readable.
+  const [fit, setFit] = useState({ scale: 1, width: PREVIEW_WIDTH });
   useEffect(() => {
     const element = box.current;
     if (!element) return;
-    const fit = () => setScale(Math.min(1, element.clientWidth / PREVIEW_WIDTH));
-    fit();
-    const observer = new ResizeObserver(fit);
+    const measure = () => {
+      const width = element.clientWidth;
+      setFit(width < NARROW ? { scale: 1, width } : { scale: Math.min(1, width / PREVIEW_WIDTH), width: PREVIEW_WIDTH });
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
   const syncPause = () => { frame.current?.contentWindow?.postMessage({type:"plural-preview-pause",paused},location.origin); };
   useEffect(syncPause, [paused]);
   return <div ref={box} className={`real-web-embed${compact ? ' compact' : ''}`}>
-    <iframe ref={frame} style={{ width: PREVIEW_WIDTH, height: `${100 / scale}%`, transform: `scale(${scale})` }} tabIndex={-1} inert onLoad={syncPause} src={`/product-preview/index.html?name=${encodeURIComponent(member.name)}&agent=${encodeURIComponent(member.agent)}`} title="Plural web client — website creation demo, view only" loading={compact ? "lazy" : "eager"} />
+    <iframe ref={frame} style={{ width: fit.width, height: `${100 / fit.scale}%`, transform: `scale(${fit.scale})` }} tabIndex={-1} inert onLoad={syncPause} src={`/product-preview/index.html?name=${encodeURIComponent(member.name)}&agent=${encodeURIComponent(member.agent)}`} title="Plural web client — website creation demo, view only" loading={compact ? "lazy" : "eager"} />
   </div>;
 }
 
-export function TerminalMockup({ compact = false, member = team[1]! }: { compact?: boolean; member?: typeof team[number] }) {
-  return (
-    <div className={`product-window terminal-window actual-tui${compact ? " compact" : ""}`}>
-      <div className="terminal-top"><b>◆ plural</b><span>backend-platform</span><span className="term-grow" /><span>{member.name} · {member.agent}</span><span>4 spaces</span></div>
-      <div className="terminal-body"><div className="terminal-feed">
-        <p><b className="term-user">{member.name}</b> {member.task}. Check {member.file}.</p>
-        <p className="term-agent">agent · imported Alia’s briefing. comparing her route changes with this branch.</p>
-        <div className="term-tool"><span>✓</span>briefing <b>alia · checkout-api</b><em>12 facts</em></div>
-        <div className="term-tool terminal-working"><span>◌</span>read <b>{member.file}</b><em>working…</em></div>
-        <p className="shared-example-label">Shared context · checkout client patch and overlap</p>
-        <div className="term-diff"><span>- client.post('/checkout', body)</span><b>+ client.post('/v2/checkout', body)</b></div>
-        <div className="term-approval"><b>⚠ src/api/checkout.ts also changed</b><span>alia · 3m</span><p>Her agent touched this file on feat/checkout-v2.</p><div><kbd>y</kbd> continue　<kbd>m</kbd> message alia　<kbd>n</kbd> stop</div></div>
-      </div><aside className="terminal-side"><b>SPACES</b><p className="selected">● you <span>landing</span></p><p>◆ alia <span>checkout</span></p><p>● bek <span>auth-fix · 👁2</span></p><p>○ cleo <span>onboarding</span></p><b>INBOX</b><p>1 · file overlap</p><p>1 · briefing ready</p><b>YOUR AGENT</b><p>running · 3 tools</p></aside></div>
-      <div className="terminal-input"><b>›</b><span>message the room</span><i /></div>
-    </div>
-  );
+export function TerminalMockup(_: { compact?: boolean; member?: typeof team[number] }) {
+  return <TuiShot />;
 }
 
 export default function ProductScene() {
