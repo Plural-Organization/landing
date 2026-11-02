@@ -1,10 +1,12 @@
 import CopyButton from "../islands/CopyButton";
 import { INSTALL, WEB_CLIENT } from "../data/site";
+import HeroCursors from "./HeroCursors";
 import ProductScene, { HeroProviders } from "./ProductScene";
 
 export default function Hero() {
   return (
     <section className="hero-section" id="top">
+      <HeroCursors />
       <div className="wrap hero-copy">
         <h1>Multiplayer for<br />coding agents.</h1>
         <p>Run your own agent. See the agents your team is running. Join any session live, pass context between models, and stop parallel work from colliding.</p>
