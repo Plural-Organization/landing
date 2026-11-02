@@ -1,19 +1,21 @@
-import RoleDiagram from "../islands/RoleDiagram";
+import CopyButton from "../islands/CopyButton";
+import { INSTALL, WEB_CLIENT } from "../data/site";
+import ProductScene, { HeroProviders } from "./ProductScene";
 
 export default function Hero() {
   return (
-    <div className="wrap">
-      <div className="hero">
-        <div>
-          <h1>the shared room for your coding agent.</h1>
-          <p className="lede">
-            Four people, one agent in the middle. The host runs it on their machine with their own key, and everyone else joins from a terminal or a
-            browser.
-          </p>
-          <div className="hint">hover a person, or the agent in the middle, to see what they can do</div>
+    <section className="hero-section" id="top">
+      <div className="wrap hero-copy">
+        <h1>Multiplayer for<br />coding agents.</h1>
+        <p>Run your own agent. See the agents your team is running. Join any session live, pass context between models, and stop parallel work from colliding.</p>
+        <HeroProviders />
+        <div className="hero-actions">
+          <div className="install-command"><code>{INSTALL}</code><CopyButton text={INSTALL} /></div>
+          <a className="button button-secondary" href={WEB_CLIENT}>Join from browser</a>
         </div>
-        <RoleDiagram />
+        <div className="hero-proof"><span>Local credentials</span><span>Browser + terminal</span><span>Claude, Codex, Gemini, Ollama and more</span></div>
       </div>
-    </div>
+      <div className="wrap hero-product"><ProductScene /></div>
+    </section>
   );
 }

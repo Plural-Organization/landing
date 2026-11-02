@@ -1,17 +1,2 @@
-import { REPO, VERSION, WEB_CLIENT } from "../data/site";
-
-export default function Nav() {
-  return (
-    <div className="wrap">
-      <div className="top">
-        <span><b>plural</b> · {VERSION} · apache-2.0</span>
-        <nav>
-          <a href="#log">the log</a>
-          <a href="#install">install</a>
-          <a href={WEB_CLIENT} target="_blank" rel="noopener">web client</a>
-          <a href={REPO} target="_blank" rel="noopener">github ↗</a>
-        </nav>
-      </div>
-    </div>
-  );
-}
+import { LINKS, REPO } from "../data/site";
+export default function Nav(){return <header className="site-nav"><div className="wrap nav-inner"><a className="brand" href="#top" aria-label="Plural home"><img className="brand-logo" src="/favicon.svg" alt=""/><span>plural</span></a><nav><a href="#product">Product</a><a href="#providers">Providers</a><a href={LINKS.docs}>Docs</a><a href={REPO}>GitHub</a></nav><a className="nav-cta" href="#install">Install plural</a></div></header>}

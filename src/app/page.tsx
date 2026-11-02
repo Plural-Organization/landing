@@ -2,22 +2,6 @@ import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Install from "../components/Install";
 import Nav from "../components/Nav";
-import SessionLog from "../components/SessionLog";
-import TuiExample from "../components/TuiExample";
-import Loader from "../islands/Loader";
+import ValueSections from "../components/ValueSections";
 
-export default function Page() {
-  return (
-    <>
-      <Loader />
-      <div className="page" id="page">
-        <Nav />
-        <Hero />
-        <TuiExample />
-        <SessionLog />
-        <Install />
-        <Footer />
-      </div>
-    </>
-  );
-}
+export default function Page() { return <><Nav /><main><Hero /><ValueSections /><Install /></main><Footer /></>; }

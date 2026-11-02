@@ -1,17 +1,1 @@
-import { LINKS, REPO } from "../data/site";
-
-export default function Footer() {
-  return (
-    <footer>
-      <div className="wrap">
-        <span>plural · the shared room for your coding agent</span>
-        <nav>
-          <a href={LINKS.docs} target="_blank" rel="noopener">docs</a>
-          <a href={LINKS.threatModel} target="_blank" rel="noopener">threat model</a>
-          <a href={LINKS.releases} target="_blank" rel="noopener">releases</a>
-          <a href={REPO} target="_blank" rel="noopener">github</a>
-        </nav>
-      </div>
-    </footer>
-  );
-}
+import{LINKS,REPO}from"../data/site";export default function Footer(){return <footer className="site-footer"><div className="wrap footer-grid"><div><a className="brand" href="#top"><img className="brand-logo" src="/favicon.svg" alt=""/><span>plural</span></a><p>Multiplayer for coding agents.</p></div><nav><b>Project</b><a href={REPO}>Source</a><a href={LINKS.releases}>Releases</a></nav><nav><b>Learn</b><a href={LINKS.docs}>Documentation</a><a href={LINKS.threatModel}>Threat model</a></nav></div><div className="wrap footer-bottom"><span>Apache 2.0</span><span>Built in the open</span></div></footer>}
