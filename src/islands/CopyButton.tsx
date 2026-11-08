@@ -1,23 +1,26 @@
 "use client";
 
+import { Button } from "@heroui/react";
+import { Check, Copy } from "@phosphor-icons/react";
 import { useState } from "react";
 
 export default function CopyButton({ text }: { text: string }) {
-  const [label, setLabel] = useState("copy");
+  const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
 
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(text);
-      setLabel("copied");
+      setState("copied");
     } catch {
-      setLabel("press ⌘C");
+      setState("failed");
     }
-    window.setTimeout(() => setLabel("copy"), 1600);
+    window.setTimeout(() => setState("idle"), 1600);
   };
 
   return (
-    <button className="copy" type="button" onClick={copy}>
-      {label}
-    </button>
+    <Button size="sm" variant="primary" onPress={copy} aria-label="Copy install command" className="shrink-0">
+      {state === "copied" ? <Check size={15} weight="bold" /> : <Copy size={15} />}
+      {state === "copied" ? "Copied" : state === "failed" ? "Press ⌘C" : "Copy"}
+    </Button>
   );
 }

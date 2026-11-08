@@ -41,7 +41,7 @@ export function BrowserMockup({ compact = false, member = team[0]!, paused = fal
   const syncPause = () => { frame.current?.contentWindow?.postMessage({type:"plural-preview-pause",paused},location.origin); };
   useEffect(syncPause, [paused]);
   return <div ref={box} className={`real-web-embed${compact ? ' compact' : ''}`}>
-    <iframe ref={frame} style={{ width: fit.width, height: `${100 / fit.scale}%`, transform: `scale(${fit.scale})` }} tabIndex={-1} inert onLoad={syncPause} src={`/product-preview/index.html?name=${encodeURIComponent(member.name)}&agent=${encodeURIComponent(member.agent)}`} title="Plural web client — website creation demo, view only" loading={compact ? "lazy" : "eager"} />
+    <iframe ref={frame} style={{ width: fit.width, height: `${100 / fit.scale}%`, transform: `scale(${fit.scale})` }} tabIndex={-1} inert onLoad={syncPause} src={`/product-preview/index.html?name=${encodeURIComponent(member.name)}&agent=${encodeURIComponent(member.agent)}`} title="Plural web client, website creation demo, view only" loading={compact ? "lazy" : "eager"} />
   </div>;
 }
 
