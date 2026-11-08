@@ -1,0 +1,17 @@
+/* The product demo was drawn for a light page. On the dark page its chrome follows the HeroUI surfaces. */
+.dark .network-person { background: var(--surface); color: var(--foreground); border-color: var(--border); box-shadow: none; }
+.dark .network-person.is-selected { border-color: color-mix(in oklch, var(--foreground) 35%, transparent); }
+.dark .network-icon, .dark .mint .network-icon, .dark .blue .network-icon { background: var(--surface-secondary); }
+.dark .network-identity > span, .dark .network-identity small { color: var(--muted); }
+.dark .network-status, .dark .phase-2 .network-person.is-selected .network-status { background: var(--surface-secondary); border-color: var(--border); color: var(--muted); }
+.dark .network-wires path { stroke: color-mix(in oklch, var(--foreground) 18%, transparent); }
+.dark .network-wires > span { background: var(--surface); border-color: var(--border); color: var(--foreground); }
+.dark .network-console { background: var(--surface); border-color: var(--border); box-shadow: none; }
+.dark .client-tabs { background: var(--surface-secondary); border-color: var(--border); }
+.dark .client-tabs button { color: var(--muted); }
+.dark .client-tabs button[aria-pressed=true] { background: var(--surface-tertiary); color: var(--foreground); box-shadow: none; }
+.dark .demo-pause { background: var(--surface-secondary); border-color: var(--border); color: var(--muted); }
+.dark .network-event { background: var(--surface-secondary); border-color: var(--border); color: var(--foreground); }
+.dark .network-event div > span, .dark .event-step, .dark .network-controls > span { color: var(--muted); }
+.dark .network-event b { color: var(--foreground); }
+.dark .network-icon img[src*="openai"], .dark .network-icon img[src*="ollama"], .dark .network-icon img[src*="openrouter"] { filter: invert(1); }

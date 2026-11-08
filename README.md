@@ -41,4 +41,4 @@ Deployed on Vercel, which detects Next.js with no config. The page is prerendere
 
 ## License
 
-Apache 2.0, like Plural.
+Apache 2.0. (Plural itself is GPL-3.0-or-later.)
