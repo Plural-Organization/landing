@@ -14,7 +14,7 @@ export default function ProductShowcase() {
             Everyone sees the same replies, tool calls and diffs as they happen, and joins from the terminal or the browser.
           </p>
         </div>
-        <Tabs className="mt-10" defaultSelectedKey="web">
+        <Tabs className="plx plx-2 mt-10" defaultSelectedKey="web">
           <Tabs.ListContainer className="mx-auto w-fit">
             <Tabs.List aria-label="Client">
               <Tabs.Tab id="web" className="whitespace-nowrap">Web client<Tabs.Indicator /></Tabs.Tab>

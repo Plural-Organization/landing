@@ -133,8 +133,8 @@ export default function Features() {
       <div className="mt-14 grid gap-4 md:grid-cols-3">
         {TILES.map((t, i) => (
           <Reveal key={t.title} delay={(i % 2) * 70} className={`reveal ${t.wide ? "md:col-span-2" : ""}`}>
-            <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-surface">
-              <div className="flex min-h-56 flex-1 items-center justify-center p-6" aria-hidden="true" inert>
+            <article className={`plx ${t.wide ? "plx-1" : "plx-2"} flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-surface`}>
+              <div className="flex min-h-40 flex-1 items-center justify-center p-5 sm:min-h-56 sm:p-6" aria-hidden="true" inert>
                 {t.preview}
               </div>
               <div className="px-6 pt-1 pb-6">

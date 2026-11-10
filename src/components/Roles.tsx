@@ -13,8 +13,9 @@ export default function Roles() {
         <Tabs.ListContainer className="mx-auto w-fit max-w-full overflow-x-auto">
           <Tabs.List aria-label="Roles in a room">
             {ROLES.map((role) => (
-              <Tabs.Tab key={role.key} id={role.key} className="whitespace-nowrap">
-                {role.name[0]!.toUpperCase() + role.name.slice(1)}
+              <Tabs.Tab key={role.key} id={role.key} className="whitespace-nowrap px-2.5 text-[13px] sm:px-3 sm:text-sm">
+                {role.name.split(" ")[0]![0]!.toUpperCase() + role.name.split(" ")[0]!.slice(1)}
+                {role.name.includes(" ") && <span className="hidden sm:inline">{role.name.slice(role.name.indexOf(" "))}</span>}
                 <Tabs.Indicator />
               </Tabs.Tab>
             ))}

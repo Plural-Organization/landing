@@ -4,8 +4,6 @@ const WEB_CLIENT = "https://plural-room.vercel.app";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Temporary: lets several builds live side by side while header variants are compared.
-  distDir: process.env.NEXT_DIST_DIR || ".next",
   async rewrites() {
     return [
       { source: "/app", destination: `${WEB_CLIENT}/` },

@@ -57,44 +57,36 @@ body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overf
 @keyframes slot-after-open { from { transform: translateX(-.36em); } }
 @keyframes slot-in { from { opacity: 0; transform: scale(.9); } }
 
-/* Scrolled header. The bar never changes size or shape; the treatment only ever covers the bar's own height.
-   The header's 12px top padding floats the bar at the top of the page. Once scrolled that strip is only dead glass above the
-   bar, so it moves below the bar as margin: the box keeps its 76px (the hero is laid out on it), the treatment loses the strip. */
-.nav-v { transition: padding-top .35s cubic-bezier(.16,1,.3,1), margin-bottom .35s cubic-bezier(.16,1,.3,1); }
-.nav-v[data-scrolled="true"] { padding-top: 0; margin-bottom: .75rem; }
-.nav-v::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .35s cubic-bezier(.16,1,.3,1); }
-.nav-v[data-scrolled="true"]::before { opacity: 1; }
-.nav-v .nav-isl { border: 1px solid transparent; border-radius: 999px; transition: background-color .35s, border-color .35s, backdrop-filter .35s; }
-/* islands: no bar at all, each group gets its own small glass capsule. */
-.nav-v-islands .nav-isl { padding: .25rem .5rem; }
-.nav-v-islands .nav-isl:first-child { padding: .35rem .9rem .35rem .6rem; }
-.nav-v-islands[data-scrolled="true"] .nav-isl { background: color-mix(in oklch, var(--surface) 72%, transparent); border-color: oklch(1 0 0 / .08); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 8px 24px -14px rgb(0 0 0 / .7); }
-/* pixel: frosted bar of its own height with a dotted pixel hairline under it. */
-.nav-v-pixel::before { background: color-mix(in oklch, var(--background) 62%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-.nav-v-pixel::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; pointer-events: none; opacity: 0; transition: opacity .35s; background: repeating-linear-gradient(90deg, oklch(1 0 0 / .18) 0 2px, transparent 2px 6px); }
-.nav-v-pixel[data-scrolled="true"]::after { opacity: 1; }
-/* headroom: glass that slides away while reading down and returns on the way up. */
-.nav-v-headroom { transition: transform .45s cubic-bezier(.16,1,.3,1); }
-.nav-v-headroom[data-hidden="true"] { transform: translateY(-100%); }
-.nav-v-headroom::before { background: color-mix(in oklch, var(--background) 60%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid oklch(1 0 0 / .06); }
-/* dither: pixel dissolve kept inside the bar's own height, lighter. */
-.nav-v-dither::before { background: color-mix(in oklch, var(--background) 88%, transparent); -webkit-mask: url(/hero/nav-dither-lite.png) repeat-x 0 0 / 12px 100%; mask: url(/hero/nav-dither-lite.png) repeat-x 0 0 / 12px 100%; }
-/* glass: frosted, slightly see-through, a hairline under it. */
-.nav-v-glass::before { background: color-mix(in oklch, var(--background) 55%, transparent); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); border-bottom: 1px solid oklch(1 0 0 / .06); }
-@media (prefers-reduced-motion: reduce) { .nav-v, .nav-v::before, .nav-v::after, .nav-v .nav-isl { transition: none; } }
+/* Scrolled header. The bar never changes size or shape.
+   The header's 12px top padding floats the bar at the top of the page. Once scrolled that strip would only be dead space
+   above the bar, so it moves below the bar as margin: the box keeps its 76px (the hero is laid out on it). */
+.nav-bar { transition: padding-top .35s cubic-bezier(.16,1,.3,1), margin-bottom .35s cubic-bezier(.16,1,.3,1); }
+.nav-bar[data-scrolled="true"] { padding-top: 0; margin-bottom: .75rem; }
+/* Its shade (islands/NavShade) fades in once the page scrolls. */
+.nav-shade { opacity: 0; transition: opacity .5s cubic-bezier(.16,1,.3,1); }
+.nav-shade[data-on="true"] { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .nav-bar, .nav-shade { transition: none; } }
+
+/* Headline underline that draws itself, in pixel steps, once its block scrolls in. --c colour, --d delay. */
+.mark-line { background-image: linear-gradient(var(--c), var(--c)); background-repeat: no-repeat; background-position: 0 100%; background-size: 0% .09em; padding-bottom: .06em; transition: background-size .9s steps(14, end) var(--d, .2s); }
+.reveal.in .mark-line { background-size: 100% .09em; }
+@media (prefers-reduced-motion: reduce) { .mark-line { background-size: 100% .09em; transition: none; } }
 
 /* Hero readability: darken the dither under the copy, and mark the two phrases that carry the message. */
 .hero-scrim { background: radial-gradient(42% 30% at 50% 60%, oklch(0.145 0.002 286 / .88), transparent 100%); }
-.hero-mark { background: oklch(1 0 0 / .1); color: var(--foreground); font-weight: 500; border-radius: .3em; padding: .02em .28em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.hero-mark { background: none; color: var(--foreground); font-weight: 500; }
+@media (min-width: 640px) { .hero-mark { background: oklch(1 0 0 / .1); border-radius: .3em; padding: .02em .28em; -webkit-box-decoration-break: clone; box-decoration-break: clone; } }
 
 /* Parallax: the logo sits deepest and drifts most against the pointer, the noise sits nearer and drifts less.
    On scroll the whole background lags behind the page and fades (scroll-driven, no scroll listeners). */
 .hero-depth { transition: transform .5s cubic-bezier(.16,1,.3,1); will-change: transform; }
-.hero-depth--far { transform: translate3d(calc(var(--px, 0) * -22px), calc(var(--py, 0) * -16px), 0); }
-.hero-depth--near { transform: translate3d(calc(var(--px, 0) * -8px), calc(var(--py, 0) * -6px), 0); }
+.hero-depth--far { transform: translate3d(calc(var(--px, 0) * -64px), calc(var(--py, 0) * -40px), 0) scale(1.06); }
+.hero-depth--near { transform: translate3d(calc(var(--px, 0) * -26px), calc(var(--py, 0) * -18px), 0); }
+/* The copy drifts a little the other way, so the background reads as far behind it. */
+.hero-depth--copy { transition: transform .6s cubic-bezier(.16,1,.3,1); transform: translate3d(calc(var(--px, 0) * 10px), calc(var(--py, 0) * 6px), 0); }
 @supports (animation-timeline: scroll()) {
   .hero-depth-scroll { animation: hero-depth-scroll linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
-  @keyframes hero-depth-scroll { to { transform: translateY(28vh); opacity: .25; } }
+  @keyframes hero-depth-scroll { to { transform: translateY(48vh) scale(1.08); opacity: .2; } }
 }
 
 /* Elapsed-minutes counter that ticks up when its block scrolls in. */
@@ -103,48 +95,43 @@ body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overf
 .elapsed::after { content: counter(m); }
 .reveal.in .elapsed { animation: tick 3.4s steps(41, end) .3s forwards; }
 @keyframes tick { to { --mins: var(--to); } }
-/* Timeline variant: one clock, two lanes. Positions come from --t (0..1); horizontal on md+, vertical below. */
-.tl-track { position: relative; height: 36rem; margin-left: .25rem; }
-.tl-line, .tl-seg, .tl-head, .tl-grid { position: absolute; }
-.tl-line { top: 0; bottom: 0; left: 0; width: 1px; }
-.tl-seg { left: 0; width: 2px; top: calc(var(--a) * 100%); height: calc((var(--b) - var(--a)) * 100%); }
-.tl-wait { background: repeating-linear-gradient(to bottom, #e0623a99 0 5px, transparent 5px 10px); }
-.tl-done { background: #2a9d73; box-shadow: 0 0 12px #2a9d7399; }
-.tl-dot { position: absolute; left: 0; top: calc(var(--t) * 100%); width: 9px; height: 9px; border-radius: 99px; transform: translate(-4px, -50%); box-shadow: 0 0 0 4px #0b0b0d; }
-.tl-check { width: 18px; height: 18px; transform: translate(-8.5px, -50%); background: #2a9d73; color: #06120d; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
-.tl-ev { position: absolute; left: 1.5rem; top: calc(var(--t) * 100%); transform: translateY(-1.1rem); }
-.tl-ev.end { transform: translateY(-100%); }
-.tl-gap, .tl-note { position: absolute; z-index: 1; left: 1.5rem; top: calc(var(--t) * 100%); font: 500 11px/1 var(--font-mono); letter-spacing: .04em; text-transform: uppercase; color: #f0a080aa; white-space: nowrap; }
-.tl-note { color: var(--muted); text-transform: none; font: italic 400 14px/1 var(--font-sans); letter-spacing: 0; }
-.tl-grid { display: none; }
-.tl-head { inset: 0; pointer-events: none; transform: translateY(0); opacity: 0; }
-.tl-head i { position: absolute; left: -12px; right: auto; width: 24px; top: 0; height: 1px; background: linear-gradient(90deg, transparent, #fff, transparent); }
+/* Timeline: one clock, two lanes. On md+ positions come from --t (0..1) along a shared horizontal axis. On phones
+   the lane becomes a compact column: events stacked along a line, each wait written above the message it led to. */
+.tl-track { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; padding: .25rem 0 .25rem 1.25rem; border-left: 2px dashed #e0623a66; margin-left: .25rem; }
+.tl-track.tl-short { border-left: 2px solid #2a9d73; }
+.tl-line, .tl-seg, .tl-head, .tl-grid, .tl-gap, .tl-dot { display: none; }
+.tl-ev, .tl-note { position: static; width: 100%; }
+.tl-after-note { font: 500 11px/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: #f0a080; margin: .4rem 0 .1rem; }
+.tl-note { color: var(--muted); font: italic 400 14px/1.4 var(--font-sans); }
 .tl-tick { position: absolute; left: calc(var(--t) * 100%); transform: translateX(-50%); white-space: nowrap; }
+.tl-head i { position: absolute; }
 @media (min-width: 768px) {
-  .tl-track { height: 17rem; margin-left: 0; }
-  .tl-line { top: 50%; bottom: auto; left: 0; right: 0; width: auto; height: 1px; }
+  .tl-track, .tl-track.tl-short { display: block; height: 17rem; padding: 0; border: 0; margin: 0; }
+  .tl-line, .tl-seg, .tl-head, .tl-grid, .tl-gap, .tl-dot { display: block; position: absolute; }
+  .tl-after-note { display: none; }
+  .tl-line { top: 50%; left: 0; right: 0; height: 1px; }
   .tl-seg { top: 50%; height: 2px; transform: translateY(-.5px); left: calc(var(--a) * 100%); width: calc((var(--b) - var(--a)) * 100%); }
   .tl-wait { background: repeating-linear-gradient(to right, #e0623a99 0 6px, transparent 6px 12px); }
-  .tl-dot { top: 50%; left: calc(var(--t) * 100%); transform: translate(-50%, -50%); }
-  .tl-check { transform: translate(-50%, -50%); }
-  .tl-ev { left: calc(var(--t) * 100%); top: auto; transform: translateX(-1.1rem); }
+  .tl-done { background: #2a9d73; box-shadow: 0 0 12px #2a9d7399; }
+  .tl-dot { top: 50%; left: calc(var(--t) * 100%); width: 9px; height: 9px; border-radius: 99px; transform: translate(-50%, -50%); box-shadow: 0 0 0 4px #0b0b0d; }
+  .tl-check { width: 18px; height: 18px; background: #2a9d73; color: #06120d; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+  .tl-ev { position: absolute; width: auto; left: calc(var(--t) * 100%); transform: translateX(-1.1rem); }
   .tl-ev.up { bottom: calc(50% + 1rem); }
   .tl-ev.down { top: calc(50% + 1rem); }
   .tl-ev.end { transform: translateX(calc(-100% + 1.1rem)); }
-  .tl-gap { left: calc(var(--t) * 100%); top: 50%; transform: translate(-50%, -50%); padding: .35rem .6rem; border-radius: 99px; background: #0b0b0d; border: 1px solid #e0623a40; z-index: 1; }
-  .tl-note { left: calc(var(--t) * 100%); top: calc(50% + 1.1rem); transform: translateX(-50%); }
-  .tl-grid { display: block; top: -1.75rem; bottom: 0; left: calc(var(--t) * 100%); width: 1px; background: rgb(255 255 255 / .04); }
-  .tl-head i { top: 0; bottom: 0; left: 0; width: 1px; height: auto; background: linear-gradient(to bottom, transparent, #fff 50%, transparent); }
+  .tl-gap { left: calc(var(--t) * 100%); top: 50%; transform: translate(-50%, -50%); padding: .35rem .6rem; border-radius: 99px; background: #0b0b0d; border: 1px solid #e0623a40; z-index: 1; font: 500 11px/1 var(--font-mono); letter-spacing: .04em; text-transform: uppercase; color: #f0a080aa; white-space: nowrap; }
+  .tl-note { position: absolute; width: auto; left: calc(var(--t) * 100%); top: calc(50% + 1.1rem); transform: translateX(-50%); white-space: nowrap; line-height: 1; }
+  .tl-grid { top: -1.75rem; bottom: 0; left: calc(var(--t) * 100%); width: 1px; background: rgb(255 255 255 / .04); }
+  .tl-head { inset: 0; pointer-events: none; opacity: 0; }
+  .tl-head i { top: 0; bottom: 0; left: 0; width: 1px; background: linear-gradient(to bottom, transparent, #fff 50%, transparent); }
 }
 /* Motion: a playhead crosses the lane; each event arrives as it passes. */
 .tl-ev, .tl-gap, .tl-note, .tl-dot, .tl-seg { opacity: 0; }
 .reveal.in .tl-ev, .reveal.in .tl-gap, .reveal.in .tl-note, .reveal.in .tl-dot { animation: tl-in .8s cubic-bezier(.32,.72,0,1) forwards; animation-delay: calc(var(--t) * 4.2s + .3s); }
 .reveal.in .tl-seg { animation: tl-in .6s cubic-bezier(.32,.72,0,1) forwards; animation-delay: calc(var(--b) * 4.2s + .2s); }
-.reveal.in .tl-head { animation: tl-sweep-y 4.4s cubic-bezier(.45,.05,.55,.95) .3s both; }
-@media (min-width: 768px) { .reveal.in .tl-head { animation-name: tl-sweep-x; } }
+@media (min-width: 768px) { .reveal.in .tl-head { animation: tl-sweep-x 4.4s cubic-bezier(.45,.05,.55,.95) .3s both; } }
 @keyframes tl-in { from { opacity: 0; filter: blur(6px); } to { opacity: 1; filter: none; } }
 @keyframes tl-sweep-x { 0% { opacity: 0; transform: translateX(0); } 8% { opacity: .7; } 92% { opacity: .7; } 100% { opacity: 0; transform: translateX(100%); } }
-@keyframes tl-sweep-y { 0% { opacity: 0; transform: translateY(0); } 8% { opacity: .7; } 92% { opacity: .7; } 100% { opacity: 0; transform: translateY(100%); } }
 .reveal.in .tl-track .elapsed, .reveal.in .elapsed { animation-duration: 4.2s; }
 @media (prefers-reduced-motion: reduce) {
   .tl-ev, .tl-gap, .tl-note, .tl-dot, .tl-seg { opacity: 1; animation: none !important; }
@@ -153,6 +140,22 @@ body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overf
 
 /* The frame has its own tabs, so the demo hides its inner web/terminal switch. */
 .showcase .client-tabs { display: none; }
+@media (max-width: 767px) { .showcase .network-team, .showcase .network-wires, .showcase .network-controls { display: none; } }
+
+/* Page-wide scroll parallax on visuals only (product frame, feature cards, the timeline, provider logos); text stays
+   put so it reads cleanly. Each layer drifts against the scroll at its own depth (plx-1 slow, plx-3 fast). Scroll-driven (no listeners); it uses the individual
+   `translate` property so it never fights the transform-based entrance animations. Browsers without view timelines,
+   and readers who reduce motion, get a still page. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .plx { animation: plx linear both; animation-timeline: view(); animation-range: cover; }
+    .plx-1 { --plx: 28px; }
+    .plx-2 { --plx: 56px; }
+    .plx-3 { --plx: 96px; }
+    @media (max-width: 767px) { .plx-1 { --plx: 14px; } .plx-2 { --plx: 26px; } .plx-3 { --plx: 40px; } }
+    @keyframes plx { from { translate: 0 var(--plx); } to { translate: 0 calc(var(--plx) * -1); } }
+  }
+}
 
 /* Scroll-in entrance, toggled by islands/Reveal: it marks what just arrived, once. */
 .reveal { opacity: 0; transform: translateY(12px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
@@ -163,5 +166,12 @@ body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overf
   .reveal { opacity: 1; transform: none; transition: none; }
   .hero-slot-line > .hero-word, .hero-slot__tile { animation: none; }
   .hero-slot__layer { transition: none; }
-  .hero-depth, .hero-depth-scroll { transform: none !important; animation: none !important; transition: none; }
+  .hero-depth, .hero-depth-scroll, .hero-depth--copy { transform: none !important; animation: none !important; transition: none; }
 }
+
+/* Pixel sea under the hero (islands/PixelWaves): a 1px gutter between cells keeps them reading as separate pixels,
+   and the layer fades out before the next section starts. */
+.pixel-waves { mask-image: linear-gradient(to bottom, transparent, black 30%, black 80%, transparent); }
+.pixel-waves::after { content: ""; position: absolute; inset: 0;
+  background-image: linear-gradient(to right, var(--background) 1px, transparent 1px), linear-gradient(to bottom, var(--background) 1px, transparent 1px);
+  background-size: 6px 6px; }

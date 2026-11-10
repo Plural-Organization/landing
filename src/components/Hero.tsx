@@ -5,18 +5,20 @@ import ButtonLink from "./ButtonLink";
 import DitherLogo from "../islands/DitherLogo";
 import YouCursor from "../islands/YouCursor";
 import HeroParallax from "../islands/HeroParallax";
+import PixelWaves from "../islands/PixelWaves";
 import Providers from "./Providers";
 
 export default function Hero() {
   // The first screen holds only the hero and the connectors; the product frame starts below the fold.
   return (
     <section id="top" className="relative isolate -mt-[76px] flex min-h-[100dvh] flex-col overflow-hidden pt-[76px]">
+      <PixelWaves />
       <DitherLogo />
       {/* A neutral scrim under the copy, so the dithered logo stays loud at the edges and quiet behind the words. */}
       <div aria-hidden="true" className="hero-scrim pointer-events-none absolute inset-0 -z-10" />
       <YouCursor />
       <HeroParallax />
-      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-4 py-16 text-center sm:px-6">
+      <div className="hero-depth--copy mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-4 py-16 text-center sm:px-6">
         <h1 className="text-[11vw] font-medium leading-[1.04] tracking-[-0.022em] sm:text-7xl md:text-[5.6rem]">
           <span className="sr-only">Multiplayer for coding agents.</span>
           <span aria-hidden="true" className="block">
@@ -37,9 +39,9 @@ export default function Hero() {
           Your agent&apos;s context <mark className="hero-mark">lives with one person</mark>. Plural puts the team in{" "}
           <mark className="hero-mark">the same session</mark>, so nobody re-explains anything.
         </p>
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <ButtonLink href="#install" size="lg">Install plural</ButtonLink>
-          <ButtonLink href={WEB_CLIENT} variant="tertiary" size="lg">
+        <div className="mt-10 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <ButtonLink href="#install" size="lg" className="h-12 w-full px-7 text-base sm:w-auto">Install plural</ButtonLink>
+          <ButtonLink href={WEB_CLIENT} variant="tertiary" size="lg" className="h-12 w-full px-7 text-base sm:w-auto">
             Join from browser
             <ArrowRight size={17} />
           </ButtonLink>
