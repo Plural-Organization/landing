@@ -8,3 +8,5 @@ export const LINKS = {
   threatModel: `${REPO}/blob/main/docs/threat-model.md`,
   releases: `${REPO}/releases`,
 };
+
+export const LEGAL = { updated: "November 11, 2026", email: "frichaplay@gmail.com", license: `${REPO}/blob/main/LICENSE` };

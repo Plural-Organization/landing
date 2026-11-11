@@ -1,15 +1,16 @@
-import { LINKS, REPO } from "../data/site";
+import { LEGAL, LINKS, REPO } from "../data/site";
 import LogoMark from "./LogoMark";
 
 const columns = [
   { title: "Project", links: [["Source", REPO], ["Releases", LINKS.releases]] },
   { title: "Learn", links: [["Documentation", LINKS.docs], ["Threat model", LINKS.threatModel]] },
+  { title: "Legal", links: [["Privacy Policy", "/privacy"], ["Terms of Service", "/terms"]] },
 ] as const;
 
 export default function Footer() {
   return (
     <footer className="mx-auto max-w-6xl px-4 pb-10 sm:px-6">
-      <div className="grid gap-10 py-12 sm:grid-cols-[2fr_1fr_1fr]">
+      <div className="grid gap-10 py-12 sm:grid-cols-[2fr_1fr_1fr_1fr]">
         <div>
           <a href="#top" className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-foreground no-underline">
             <LogoMark size={24} />
@@ -27,7 +28,7 @@ export default function Footer() {
         ))}
       </div>
       <div className="flex flex-wrap justify-between gap-2 text-xs text-muted">
-        <span>GPL-3.0</span>
+        <a href={LEGAL.license} className="text-muted no-underline hover:text-foreground">GPL-3.0-or-later</a>
         <span>Built in the open</span>
       </div>
     </footer>
