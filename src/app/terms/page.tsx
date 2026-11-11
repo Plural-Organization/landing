@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import LegalPage, { Section } from "../../components/LegalPage";
-import { LEGAL, REPO } from "../../data/site";
+import { LEGAL } from "../../data/site";
 
 export const metadata: Metadata = {
   title: "Terms of Service · Plural",
