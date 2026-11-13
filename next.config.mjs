@@ -1,7 +1,7 @@
 // The web client lives on its own deployment; /app serves it from here. Its files are relative
 // (./assets/…), which from /app resolve to /assets/…, so that path goes to the client too.
 const WEB_CLIENT = "https://plural-room.vercel.app";
-const DOCS = "https://docs.plrl.host";
+const DOCS = "https://docs-six-lilac.vercel.app";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
