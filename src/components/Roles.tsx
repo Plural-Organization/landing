@@ -5,6 +5,7 @@ import SectionHeading from "./SectionHeading";
 
 export default function Roles() {
   return (
+    <div className="backdrop">
     <section id="roles" aria-labelledby="roles-title" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16 sm:px-6 md:py-24">
       <SectionHeading id="roles-title" align="center" lead="One agent." tail="Clear rules around it.">
         The host keeps the machine and the key. Everyone else gets exactly the access their role allows.
@@ -22,7 +23,7 @@ export default function Roles() {
           </Tabs.List>
         </Tabs.ListContainer>
         {ROLES.map((role) => (
-          <Tabs.Panel key={role.key} id={role.key} className="pt-6">
+          <Tabs.Panel key={role.key} id={role.key} className="rounded-3xl pt-6 outline-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-[var(--focus)]">
             <Card className="rounded-3xl border border-border bg-surface p-6 shadow-none sm:p-8">
               <Card.Header className="p-0">
                 <Card.Title className="text-2xl font-semibold tracking-tight">{role.name[0]!.toUpperCase() + role.name.slice(1)}</Card.Title>
@@ -59,5 +60,6 @@ export default function Roles() {
         ))}
       </Tabs>
     </section>
+    </div>
   );
 }

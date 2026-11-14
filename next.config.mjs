@@ -5,6 +5,10 @@ const DOCS = "https://docs-six-lilac.vercel.app";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // The screenshots are text-heavy, so they use quality 90 (Next allows only 75 unless listed).
+  images: { qualities: [75, 90] },
+  // Lets a phone reach `next dev` through a Cloudflare quick tunnel; without it the page loads but never hydrates.
+  allowedDevOrigins: ["*.trycloudflare.com"],
   async rewrites() {
     return [
       { source: "/docs", destination: `${DOCS}/docs` },

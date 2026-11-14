@@ -8,6 +8,7 @@ export default function Install() {
   return (
     <section id="install" aria-labelledby="install-title" className="scroll-mt-24 px-3 py-12 sm:px-6 sm:py-20">
       <div className="relative isolate mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-border bg-surface px-5 py-12 sm:px-12 sm:py-20 md:py-28">
+        <div className="rings" aria-hidden="true" />
         <div className="flex flex-col items-center text-center">
           <h2 id="install-title" className="text-4xl font-medium leading-[1.02] tracking-[-0.022em] md:text-7xl">
             Give your agent
