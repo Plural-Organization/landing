@@ -138,9 +138,43 @@ body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overf
   .tl-head { display: none; }
 }
 
-/* The frame has its own tabs, so the demo hides its inner web/terminal switch. */
-.showcase .client-tabs { display: none; }
-@media (max-width: 767px) { .showcase .network-team, .showcase .network-wires, .showcase .network-controls { display: none; } }
+/* Section backdrops, on every other section so the page keeps its rhythm. Pure CSS, no canvas: still for readers who
+   reduce motion, and cheap on a phone. The glows take the people's colours (alia coral, bek mint, cleo blue). */
+.backdrop { position: relative; isolation: isolate; overflow: hidden; }
+.backdrop::before, .backdrop::after { content: ""; position: absolute; z-index: -1; pointer-events: none; }
+.backdrop::before { inset: -15% -10%;
+  background:
+    radial-gradient(45% 50% at 18% 30%, oklch(0.62 0.17 35 / .28), transparent 70%),
+    radial-gradient(45% 50% at 82% 72%, oklch(0.6 0.17 260 / .28), transparent 70%),
+    radial-gradient(30% 35% at 55% 5%, oklch(0.72 0.12 165 / .14), transparent 70%); }
+.backdrop::after { inset: 0;
+  background-image: radial-gradient(oklch(1 0 0 / .16) 1px, transparent 1.3px); background-size: 20px 20px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, black, transparent 75%); }
+@media (prefers-reduced-motion: no-preference) {
+  .backdrop::before { animation: backdrop-drift 28s ease-in-out infinite alternate; }
+  @keyframes backdrop-drift { to { transform: translate3d(2%, -3%, 0) scale(1.06); } }
+}
+
+/* The "one room" band: darker than the page, a pale light falling from the top, the three people's colours as faint
+   far-edge glows, and a dot grid that fades out toward the middle. Static. */
+.room-band { background-color: oklch(0.1 0.003 286); }
+.room-band::before, .room-band::after { content: ""; position: absolute; z-index: -1; pointer-events: none; }
+.room-band::before { inset: 0;
+  background:
+    radial-gradient(60% 45% at 50% 0%, oklch(1 0 0 / .09), transparent 70%),
+    radial-gradient(40% 50% at 0% 85%, oklch(0.62 0.17 35 / .16), transparent 70%),
+    radial-gradient(40% 50% at 100% 85%, oklch(0.6 0.17 260 / .16), transparent 70%),
+    radial-gradient(30% 35% at 50% 100%, oklch(0.72 0.12 165 / .10), transparent 70%); }
+.room-band::after { inset: 0;
+  background-image: radial-gradient(oklch(1 0 0 / .13) 1px, transparent 1.3px); background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black, transparent 70%); }
+
+/* Rings that spread from behind the install card's headline. */
+.rings { position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
+  background:
+    radial-gradient(circle at 50% 38%, oklch(0.72 0.12 165 / .14), transparent 45%),
+    repeating-radial-gradient(circle at 50% 38%, transparent 0 78px, oklch(1 0 0 / .06) 78px 79px);
+  mask-image: radial-gradient(ellipse 80% 75% at 50% 38%, black, transparent 80%); }
 
 /* Page-wide scroll parallax on visuals only (product frame, feature cards, the timeline, provider logos); text stays
    put so it reads cleanly. Each layer drifts against the scroll at its own depth (plx-1 slow, plx-3 fast). Scroll-driven (no listeners); it uses the individual
@@ -168,10 +202,3 @@ body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overf
   .hero-slot__layer { transition: none; }
   .hero-depth, .hero-depth-scroll, .hero-depth--copy { transform: none !important; animation: none !important; transition: none; }
 }
-
-/* Pixel sea under the hero (islands/PixelWaves): a 1px gutter between cells keeps them reading as separate pixels,
-   and the layer fades out before the next section starts. */
-.pixel-waves { mask-image: linear-gradient(to bottom, transparent, black 30%, black 80%, transparent); }
-.pixel-waves::after { content: ""; position: absolute; inset: 0;
-  background-image: linear-gradient(to right, var(--background) 1px, transparent 1px), linear-gradient(to bottom, var(--background) 1px, transparent 1px);
-  background-size: 6px 6px; }

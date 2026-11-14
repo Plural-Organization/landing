@@ -1,11 +1,12 @@
-import { Alert, Avatar, Button, Chip, Kbd } from "@heroui/react";
+import { Alert, Avatar, Button, Chip } from "@heroui/react";
 import { ArrowRight, FileTs, LockSimple } from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import Reveal from "../islands/Reveal";
 import SectionHeading from "./SectionHeading";
 
-// Each tile shows the feature as the product shows it, built from real HeroUI components with the demo team
-// (Alia, Bek and Cleo from the hero scene). Display only: the controls inside are inert.
+// Each tile shows the feature as the product shows it: real screenshots of the web client where it has one, and
+// HeroUI components with the demo team (Alia, Bek and Cleo from the hero scene) for the rest. Display only.
 const team = [
   { name: "Alia", agent: "Claude", color: "#e0623a", task: "Tracing the login redirect", state: "Needs you" },
   { name: "Bek", agent: "Codex", color: "#2a9d73", task: "Updating the checkout client", state: "Working" },
@@ -34,23 +35,6 @@ function Sessions() {
         </li>
       ))}
     </ul>
-  );
-}
-
-function Live() {
-  return (
-    <div className="w-full max-w-sm rounded-2xl bg-surface-secondary p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex -space-x-2">
-          {team.map((p) => <Face key={p.name} name={p.name} color={p.color} />)}
-        </div>
-        <span className="text-xs text-muted">3 in the room</span>
-      </div>
-      <div className="mt-4 space-y-2 font-mono text-[12px]">
-        <p className="text-muted"><span style={{ color: "#2a9d73" }}>bek</span> › check the retry path in checkout.ts</p>
-        <p className="text-muted"><span className="text-foreground">agent</span> › reading src/api/checkout.ts</p>
-      </div>
-    </div>
   );
 }
 
@@ -100,24 +84,17 @@ function Key() {
   );
 }
 
-function Approval() {
-  return (
-    <div className="w-full max-w-sm rounded-2xl bg-surface-secondary p-4">
-      <p className="text-xs text-muted">Bek&apos;s run wants to write</p>
-      <p className="mt-1 font-mono text-sm">src/api/checkout.ts  <span style={{ color: "#2a9d73" }}>+14</span> <span style={{ color: "#e0623a" }}>−3</span></p>
-      <div className="mt-4 flex items-center gap-2">
-        <Button size="sm" className="pointer-events-none">Approve</Button>
-        <Button size="sm" variant="tertiary" className="pointer-events-none">Reject</Button>
-        <span className="ml-auto flex gap-1"><Kbd>y</Kbd><Kbd>n</Kbd></span>
-      </div>
-    </div>
-  );
-}
-
 // Three rows of two, the wide tile switching sides each row. The shared room first, the team layer after.
-const TILES: { title: string; body: string; preview: ReactNode; wide?: boolean }[] = [
-  { title: "Join live, with the full history", body: "Teammates open the room link and see every reply, tool call and diff. Late joiners get everything that came before.", preview: <Live />, wide: true },
-  { title: "Writes wait for the host", body: "Reads are free. Every write and shell command asks the host first.", preview: <Approval /> },
+const TILES: { title: string; body: string; preview?: ReactNode; shot?: { src: string; alt: string; width: number; height: number; fit?: "phone" }; wide?: boolean }[] = [
+  {
+    title: "Writes wait for the host", body: "Reads are free. Every write and shell command asks the host first, and a guest's run can never be waved through by a rule.",
+    shot: { src: "/shots/approval-crop.jpg", width: 780, height: 345, alt: "The agent asks to use edit on src/auth/session.ts. Bek's prompt started this run, so it asks the host. Buttons: Allow once, For the session, Reject, Block." },
+    wide: true,
+  },
+  {
+    title: "Join from a phone", body: "Open the room link in any browser, type a name and you are in. Same session, same approvals, no install.",
+    shot: { src: "/shots/phone-room.jpg", width: 416, height: 786, fit: "phone", alt: "The Plural room on a phone: the agent's reply about the cookie fix and a message from Cleo to the team." },
+  },
   { title: "Your key stays on your machine", body: "The agent runs with the host's key or login. Nobody else receives it.", preview: <Key /> },
   { title: "Every session on the team", body: "When everyone runs their own agent, Spaces shows who is working, on which repo and branch, and who is waiting on a person.", preview: <Sessions />, wide: true },
   { title: "Catch the same file twice", body: "Two agents changed one file? Both people are told, and nothing is blocked.", preview: <Overlap />, wide: true },
@@ -134,9 +111,19 @@ export default function Features() {
         {TILES.map((t, i) => (
           <Reveal key={t.title} delay={(i % 2) * 70} className={`reveal ${t.wide ? "md:col-span-2" : ""}`}>
             <article className={`plx ${t.wide ? "plx-1" : "plx-2"} flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-surface`}>
-              <div className="flex min-h-40 flex-1 items-center justify-center p-5 sm:min-h-56 sm:p-6" aria-hidden="true" inert>
-                {t.preview}
-              </div>
+              {t.shot ? (
+                <div className={`flex flex-1 items-center justify-center p-4 sm:p-5 ${t.shot.fit === "phone" ? "pb-0" : ""}`}>
+                  <Image
+                    src={t.shot.src} alt={t.shot.alt} width={t.shot.width} height={t.shot.height} quality={90}
+                    sizes={t.shot.fit === "phone" ? "260px" : "(min-width: 1152px) 700px, 92vw"}
+                    className={t.shot.fit === "phone" ? "h-auto max-h-[24rem] w-auto max-w-[260px] rounded-t-2xl border border-b-0 border-border object-cover object-top" : "h-auto w-full rounded-2xl border border-border"}
+                  />
+                </div>
+              ) : (
+                <div className="flex min-h-40 flex-1 items-center justify-center p-5 sm:min-h-56 sm:p-6" aria-hidden="true" inert>
+                  {t.preview}
+                </div>
+              )}
               <div className="px-6 pt-1 pb-6">
                 <h3 className="text-lg font-medium tracking-tight">{t.title}</h3>
                 <p className="mt-1 text-[15px] leading-relaxed text-muted">{t.body}</p>

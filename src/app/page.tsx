@@ -3,9 +3,8 @@ import Features from "../components/Features";
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Install from "../components/Install";
-import ContextProblem from "../components/ContextProblem";
+import Story from "../components/Story";
 import Nav from "../components/Nav";
-import ProductShowcase from "../components/ProductShowcase";
 import Roles from "../components/Roles";
 
 export default function Page() {
@@ -14,8 +13,7 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
-        <ContextProblem />
-        <ProductShowcase />
+        <Story />
         <Features />
         <Roles />
         <Faq />

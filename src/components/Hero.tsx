@@ -5,14 +5,12 @@ import ButtonLink from "./ButtonLink";
 import DitherLogo from "../islands/DitherLogo";
 import YouCursor from "../islands/YouCursor";
 import HeroParallax from "../islands/HeroParallax";
-import PixelWaves from "../islands/PixelWaves";
 import Providers from "./Providers";
 
 export default function Hero() {
   // The first screen holds only the hero and the connectors; the product frame starts below the fold.
   return (
     <section id="top" className="relative isolate -mt-[76px] flex min-h-[100dvh] flex-col overflow-hidden pt-[76px]">
-      <PixelWaves />
       <DitherLogo />
       {/* A neutral scrim under the copy, so the dithered logo stays loud at the edges and quiet behind the words. */}
       <div aria-hidden="true" className="hero-scrim pointer-events-none absolute inset-0 -z-10" />
