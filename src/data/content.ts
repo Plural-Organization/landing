@@ -1,27 +1,54 @@
-export const FEATURES = [
+// The three ways unshared context costs a team, each with the part of the product that answers it.
+export const PAINS = [
   {
-    title: "See who is working",
-    body: "Every session on the team in one list: who runs it, which repo and branch, and which agent is waiting on a person.",
+    title: "Context lives in one chat",
+    body: "Each person runs their own agent, and each agent knows only its own conversation. What one finds, the next finds again.",
+    answer: "One room",
+    href: "#room",
   },
   {
-    title: "Join any session live",
-    body: "Open a teammate's session and see the same turns, tool calls and diffs as they happen.",
+    title: "Findings travel by copy-paste",
+    body: "What an agent learned reaches the team as a pasted transcript, or secondhand in a call. The next agent starts from zero.",
+    answer: "Briefings",
+    href: "#features",
   },
   {
-    title: "Move context, not transcripts",
-    body: "Ask one agent for a structured briefing and import it into another, even when the two run different models.",
+    title: "Two agents, one file",
+    body: "Nobody sees what a teammate's agent is changing until the branches meet in a merge conflict.",
+    answer: "Same-file warnings",
+    href: "#features",
+  },
+];
+
+// The room, beat by beat. Each step is one real capture of the web client. `focus` says which end of the conversation
+// the step is about, for the layouts that zoom into the capture and cannot show all of its height.
+export const TOUR = [
+  {
+    key: "ask",
+    focus: "top",
+    label: "Ask",
+    title: "Alia asks. Everyone sees the answer.",
+    body: "The agent searches the code and names the cause. Bek and Cleo are in the room, so nobody forwards anything.",
+    src: "/shots/room-found.png",
+    alt: "Alia's room in the Plural web client. She asks why people land back on the login page after SSO; the agent searches the code, reads the callback and explains that the session cookie is set with SameSite=Strict. Bek and Cleo are listed as participants.",
   },
   {
-    title: "Catch the same file twice",
-    body: "Get warned before two agents edit the same file, then open the other session and settle it.",
+    key: "approve",
+    focus: "bottom",
+    label: "Approve",
+    title: "Bek prompts. Alia decides.",
+    body: "Bek tells the agent to apply the fix. It is Alia's machine, so the edit waits for her: once, for the session, reject or block.",
+    src: "/shots/room-approval.png",
+    alt: "The same room a minute later. Cleo wrote a note to the team, Bek asked the agent to apply the fix, and a card asks the host to allow the edit of src/auth/session.ts, because Bek's prompt started the run.",
   },
   {
-    title: "Keys stay on the host",
-    body: "The agent runs on the host's machine with the host's key and model. Nobody else ever receives it.",
-  },
-  {
-    title: "Writes wait for the host",
-    body: "Reads are free. Every write and shell command goes through the host, in open or review mode.",
+    key: "ship",
+    focus: "bottom",
+    label: "Ship",
+    title: "One diff, in front of all three.",
+    body: "The change lands as a numbered diff with the agent's summary, next to Cleo's note and Bek's prompt. That is the whole thread.",
+    src: "/shots/room-done.png",
+    alt: "The room after the host allowed the edit: the diff of src/auth/session.ts changes SameSite=Strict to SameSite=Lax, and the agent says the test still passes. The left rail lists the team's three rooms with their status.",
   },
 ];
 
@@ -42,7 +69,15 @@ export const FAQ = [
   },
   {
     q: "Do guests need to install anything?",
-    a: "No. A guest can join from the browser with a link. The terminal client is there for people who want it.",
+    a: "No. A guest can join from the browser with a link, on a laptop or a phone. The terminal client is there for people who want it.",
+  },
+  {
+    q: "Terminal or browser?",
+    a: "Both, on the same session. The terminal client is one full-screen program with mouse and keyboard; the browser client needs no install. Each person picks, and they see the same turns, diffs, approvals and queue.",
+  },
+  {
+    q: "Can everyone keep their own agent?",
+    a: "Yes. In a team each person runs their own room with their own key and model. The team sees every shared room in one list, anyone can open one to read it live, two agents changing the same file are both warned, and one agent can write a briefing for another.",
   },
   {
     q: "Who approves file writes and commands?",

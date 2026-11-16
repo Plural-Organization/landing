@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="" />
         <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700&display=swap" />
         <noscript>
-          <style>{".reveal, .tuishot .tl { opacity: 1 !important; transform: none !important; }"}</style>
+          <style>{".reveal, .pop { opacity: 1 !important; transform: none !important; }"}</style>
         </noscript>
       </head>
       <body>{children}</body>

@@ -191,6 +191,113 @@ body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overf
   }
 }
 
+/* A window around a capture (components/Frame): a quiet title bar, then the screenshot edge to edge. */
+.frame { position: relative; overflow: hidden; border-radius: 1.25rem; border: 1px solid oklch(1 0 0 / .1); background: oklch(0.12 0.003 286);
+  box-shadow: 0 50px 120px -40px rgb(0 0 0 / .95), 0 0 0 1px oklch(1 0 0 / .03), 0 1px 0 oklch(1 0 0 / .08) inset; }
+.frame-bar { position: relative; display: flex; align-items: center; height: 2.5rem; padding-inline: .9rem; border-bottom: 1px solid oklch(1 0 0 / .07); background: oklch(0.17 0.003 286); }
+.frame-dots { display: flex; gap: .4rem; }
+.frame-dots i { width: .62rem; height: .62rem; border-radius: 99px; background: oklch(1 0 0 / .14); }
+.frame-url, .frame-title { position: absolute; left: 50%; transform: translateX(-50%); max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 400 12px/1 var(--font-mono); color: var(--muted); }
+.frame-url { padding: .42rem .9rem; border-radius: 99px; background: oklch(1 0 0 / .05); }
+@media (min-width: 640px) { .frame { border-radius: 1.5rem; } }
+/* On a phone a centred title would run under the dots, so it sits after them instead. */
+@media (max-width: 639px) { .frame-url, .frame-title { position: static; transform: none; min-width: 0; margin-left: .75rem; } }
+
+/* The room tour (islands/RoomTour). Three layouts from one markup:
+   phone: heading, capture, steps; the capture zooms into the conversation column, because a 1440px interface is
+     unreadable at 390px;
+   tablet: the same order with the whole interface;
+   desktop: heading and steps on the left, the capture on the right, zoomed into the conversation at about its real
+     size and cut to the end of the thread the step is about (data-focus). */
+.tour { display: flex; flex-direction: column; gap: 1.5rem; }
+.tour-side { display: contents; }
+.tour-head { order: 1; text-align: center; margin-bottom: 1rem; }
+.tour-frame { order: 2; }
+.tour-steps { order: 3; display: grid; gap: .5rem; }
+/* The one row is as tall as the stage, not as the zoomed capture, so a capture can be pinned to the stage's bottom. */
+.tour-stage { display: grid; grid-template-rows: minmax(0, 1fr); overflow: hidden; }
+.tour-shot { grid-area: 1 / 1; min-height: 0; display: flex; align-items: flex-start; opacity: 0; transform: scale(1.012); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+.tour-shot[data-active="true"] { opacity: 1; transform: none; }
+.tour-img { display: block; flex: none; width: 100%; height: auto; }
+@media (max-width: 639px) {
+  .tour-stage { aspect-ratio: 1 / 1.04; }
+  .tour-img { width: 172%; max-width: none; margin-left: -36.5%; }
+}
+@media (min-width: 640px) and (max-width: 1023px) { .tour-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; } }
+@media (min-width: 1024px) {
+  .tour { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 9fr); align-items: center; gap: 3.5rem; }
+  .tour-side { display: block; }
+  .tour-head { text-align: left; margin-bottom: 2.25rem; }
+  .tour-steps { gap: .35rem; }
+  .tour-stage { aspect-ratio: 1 / .78; }
+  .tour-shot[data-focus="bottom"] { align-items: flex-end; }
+  .tour-img { width: 172%; max-width: none; margin-left: -36.5%; }
+}
+.tour-step { position: relative; overflow: hidden; text-align: left; padding: 1.1rem 1.15rem 1.15rem; border-radius: 1.25rem; border: 1px solid transparent; background: transparent; cursor: pointer;
+  transition: background-color .4s, border-color .4s, opacity .4s; opacity: .55; }
+.tour-step:hover { opacity: .9; }
+.tour-step[data-active="true"] { opacity: 1; background: oklch(1 0 0 / .045); border-color: oklch(1 0 0 / .09); }
+.tour-step:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.tour-num { display: grid; place-items: center; width: 1.4rem; height: 1.4rem; border-radius: 99px; border: 1px solid oklch(1 0 0 / .16); font: 500 11px/1 var(--font-mono); color: var(--muted); transition: background-color .3s, color .3s, border-color .3s; }
+.tour-step[data-active="true"] .tour-num { background: var(--accent); border-color: var(--accent); color: var(--accent-foreground); }
+/* The body of a step folds away when the step is not the active one (a grid row animates between 0fr and 1fr). On a
+   tablet the three steps sit in a row with room to spare, so they stay open. */
+.tour-fold { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s cubic-bezier(.16,1,.3,1); }
+.tour-fold > .tour-body { overflow: hidden; min-height: 0; }
+.tour-step[data-active="true"] .tour-fold { grid-template-rows: 1fr; }
+@media (min-width: 640px) and (max-width: 1023px) { .tour-fold { grid-template-rows: 1fr; } }
+/* Progress: a line along the top of the step, or down its left edge on a desktop where the steps are stacked. */
+.tour-bar { position: absolute; inset: 0 0 auto 0; height: 2px; background: oklch(1 0 0 / .06); opacity: 0; }
+.tour-step[data-active="true"] .tour-bar { opacity: 1; }
+.tour-bar i { display: block; height: 100%; width: 100%; transform-origin: 0 0; transform: scaleX(0); background: linear-gradient(to right, oklch(0.72 0.12 165), oklch(0.7 0.14 255)); }
+@media (min-width: 1024px) {
+  .tour-step { padding-left: 1.5rem; }
+  .tour-bar { inset: 0 auto 0 0; width: 2px; height: auto; }
+  .tour-bar i { transform: scaleY(0); background: linear-gradient(to bottom, oklch(0.72 0.12 165), oklch(0.7 0.14 255)); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tour-step[data-active="true"] .tour-bar i { animation: tour-fill 6.5s linear forwards; animation-play-state: paused; }
+  .tour[data-playing="true"] .tour-step[data-active="true"] .tour-bar i { animation-play-state: running; }
+  @keyframes tour-fill { to { transform: none; } }
+}
+@media (prefers-reduced-motion: reduce) { .tour-shot, .tour-step, .tour-num, .tour-fold { transition: none; } .tour-shot { transform: none; } }
+
+/* The terminal capture: same phone treatment, zoomed into the conversation, the side panel cropped. */
+.term-frame { background: #000; }
+.term-shot { overflow: hidden; background: #000; padding: .5rem; }
+.term-img { display: block; width: 100%; height: auto; }
+@media (max-width: 639px) { .term-img { width: 158%; max-width: none; } }
+
+/* The problem diagram (components/Story): two chats side by side with a gap nothing crosses. */
+.split { display: grid; gap: .75rem; padding: .75rem; border-radius: 1.75rem; border: 1px solid var(--border); background: oklch(0.165 0.003 286); }
+.split-chat { padding: 1.25rem; border-radius: 1.25rem; background: var(--surface); border: 1px solid var(--border); }
+.split-chat--warn { border-color: oklch(0.62 0.17 35 / .35); background: linear-gradient(oklch(0.62 0.17 35 / .07), transparent 60%), var(--surface); }
+.bubble { display: block; max-width: 34ch; padding: .65rem .9rem; border-radius: 1.1rem; background: var(--surface-secondary); font-size: 15px; line-height: 1.45; color: oklch(0.9 0.005 286); }
+.bubble--me { background: oklch(1 0 0 / .1); color: var(--foreground); }
+.split-chat--warn .bubble:not(.bubble--me) { color: oklch(0.82 0.1 40); }
+.split-gap { display: flex; align-items: center; justify-content: center; }
+.split-gap span { padding: .35rem .7rem; border-radius: 99px; border: 1px dashed oklch(0.62 0.17 35 / .5); font: 500 11px/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: oklch(0.8 0.1 40); white-space: nowrap; }
+@media (min-width: 768px) {
+  .split { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: stretch; }
+  .split-gap { width: 2.5rem; background: repeating-linear-gradient(to bottom, oklch(0.62 0.17 35 / .45) 0 5px, transparent 5px 11px) center / 1px 100% no-repeat; }
+  .split-gap span { writing-mode: vertical-rl; rotate: 180deg; padding: .7rem .35rem; background: oklch(0.165 0.003 286); }
+}
+/* Its bubbles arrive one after another once the block scrolls in. */
+.pop { opacity: 0; transform: translateY(8px) scale(.98); }
+.reveal.in .pop { animation: pop-in .55s cubic-bezier(.16,1,.3,1) forwards; animation-delay: calc(var(--i, 0) * .45s + .25s); }
+@keyframes pop-in { to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .pop { opacity: 1; transform: none; animation: none !important; } }
+.pain-link { display: inline-flex; align-items: center; gap: .4rem; width: fit-content; font-size: 14px; font-weight: 500; color: var(--foreground); text-decoration: none; border-radius: .4rem; }
+.pain-link svg { transition: transform .25s cubic-bezier(.16,1,.3,1); }
+.pain-link:hover svg { transform: translateX(3px); }
+.pain-link:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+/* Feature tiles lift a little under the pointer. */
+.tile { transition: border-color .3s, transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .tile:hover { transform: translateY(-3px); border-color: oklch(1 0 0 / .16); box-shadow: 0 24px 60px -30px rgb(0 0 0 / .9); }
+}
+
 /* Scroll-in entrance, toggled by islands/Reveal: it marks what just arrived, once. */
 .reveal { opacity: 0; transform: translateY(12px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
 .reveal.in { opacity: 1; transform: none; }

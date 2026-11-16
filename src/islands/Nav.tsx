@@ -8,6 +8,9 @@ import NavShade from "./NavShade";
 import { LINKS, REPO } from "../data/site";
 
 const items = [
+  { href: "#room", label: "Product" },
+  { href: "#features", label: "Teams" },
+  { href: "#terminal", label: "Terminal" },
   { href: "#roles", label: "Roles" },
   { href: "#faq", label: "FAQ" },
   { href: LINKS.docs, label: "Docs" },

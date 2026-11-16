@@ -6,6 +6,7 @@ import Install from "../components/Install";
 import Story from "../components/Story";
 import Nav from "../components/Nav";
 import Roles from "../components/Roles";
+import Terminal from "../components/Terminal";
 
 export default function Page() {
   return (
@@ -15,6 +16,7 @@ export default function Page() {
         <Hero />
         <Story />
         <Features />
+        <Terminal />
         <Roles />
         <Faq />
         <Install />
