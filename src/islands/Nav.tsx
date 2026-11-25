@@ -7,13 +7,13 @@ import LogoMark from "../components/LogoMark";
 import NavShade from "./NavShade";
 import { LINKS, REPO } from "../data/site";
 
-const items = [
+// Sections of the home page; another page passes `base="/"` so they lead back to it.
+const sections = [
   { href: "#room", label: "Product" },
   { href: "#features", label: "Teams" },
   { href: "#terminal", label: "Terminal" },
   { href: "#roles", label: "Roles" },
   { href: "#faq", label: "FAQ" },
-  { href: LINKS.docs, label: "Docs" },
 ];
 
 // The bar keeps its size and shape at every scroll position. Once the page scrolls, a pixel shade appears behind it
@@ -21,7 +21,8 @@ const items = [
 // (each marked data-nav-clear) so they stay readable.
 // A sentinel at the top of the document says when, so nothing listens to scroll events.
 // Below md the links move into a menu opened from the bar.
-export default function Nav() {
+export default function Nav({ base = "" }: { base?: string }) {
+  const items = [...sections.map((item) => ({ ...item, href: `${base}${item.href}` })), { href: "/updates", label: "Updates" }, { href: LINKS.docs, label: "Docs" }];
   const sentinel = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -47,7 +48,7 @@ export default function Nav() {
       <header data-scrolled={scrolled} className="nav-bar sticky top-0 z-50 flex justify-center px-3 pt-3 sm:px-4">
         <NavShade on={scrolled || open} />
         <div className="flex h-16 w-full max-w-6xl items-center px-3 sm:px-4 md:grid md:grid-cols-[1fr_auto_1fr]">
-          <a href="#top" aria-label="Plural home" data-nav-clear className="flex items-center gap-3 justify-self-start text-[1.4rem] font-semibold tracking-[-0.03em] text-foreground no-underline">
+          <a href={base === "" ? "#top" : base} aria-label="Plural home" data-nav-clear className="flex items-center gap-3 justify-self-start text-[1.4rem] font-semibold tracking-[-0.03em] text-foreground no-underline">
             <LogoMark size={30} />
             plural
           </a>
@@ -63,7 +64,7 @@ export default function Nav() {
               <GithubLogo size={18} />
               GitHub
             </ButtonLink>
-            <ButtonLink href="#install">Get started</ButtonLink>
+            <ButtonLink href={`${base}#install`}>Get started</ButtonLink>
             <button
               type="button"
               aria-label={open ? "Close menu" : "Open menu"}
