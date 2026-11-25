@@ -5,6 +5,7 @@ import LogoMark from "./LogoMark";
 const LINK_LIST: [string, string][] = [
   ["Documentation", LINKS.docs],
   ["Source", REPO],
+  ["Updates", "/updates"],
   ["Releases", LINKS.releases],
   ["Threat model", LINKS.threatModel],
   ["Join from browser", WEB_CLIENT],
