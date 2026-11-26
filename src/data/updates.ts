@@ -15,6 +15,31 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "0.2.31",
+    date: "2026-11-25",
+    title: "Shown around",
+    summary: "A first visit to a room now comes with a short tour, room settings are easier to read, and your earlier messages show up as you step back through them.",
+    changes: {
+      new: [
+        "A first-visit tour in the web client points at the composer, who may prompt, what the agent may do and who is in the room. Skip it any time.",
+        "Up in the composer now lists your earlier messages and shows where you are, in the terminal and the browser.",
+        "The terminal keeps your last hundred prompts between sessions.",
+        "The room panel shows everyone what the agent may do, and the host can change it from there.",
+      ],
+      improved: [
+        "Room settings are grouped and drawn as tiles, with permission modes ordered from safest to riskiest.",
+        "The top bar, the trace and the command list fit narrow screens and phones.",
+      ],
+      fixed: [
+        "A shared room or team link opens right away, even if you are already in a team.",
+        "Tables in the agent's replies show as tables in the web client.",
+        "Long code no longer makes the room scroll sideways on a phone.",
+        "Attached images load again after a reconnect.",
+      ],
+    },
+    shot: { src: "/shots/room-tour.png", width: 2880, height: 1800, alt: "The first-visit tour in the web client, explaining the Ask, Auto and Danger zone permission modes beside the room panel.", frame: "plrl.host/app" },
+  },
+  {
     version: "0.2.30",
     date: "2026-11-17",
     title: "Pick up where you left off",
