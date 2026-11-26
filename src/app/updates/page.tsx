@@ -59,6 +59,7 @@ function Entry({ release, latest, index }: { release: Release; latest: boolean; 
 
 export default function Updates() {
   const latest = RELEASES[0]!;
+  const previous = RELEASES[1]!;
   return (
     <>
       <Nav base="/" />
@@ -88,7 +89,7 @@ export default function Updates() {
             <Frame title="plural update" kind="terminal" className="upd-term hidden lg:block" >
               <pre aria-label="Output of plural update">
                 <span className="upd-term-prompt">$</span> plural update{"\n"}
-                updating plural 0.2.29 <span className="upd-term-dim">→</span> {latest.version}{"\n"}
+                updating plural {previous.version} <span className="upd-term-dim">→</span> {latest.version}{"\n"}
                 <span className="upd-term-dim">&gt;</span> Downloading plural and plural-host{"\n"}
                 <span className="upd-term-dim">&gt;</span> Starting the host once{"\n"}
                 {"\n"}
